@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const bcrypt = require("bcryptjs");
 
 exports.getUsers = (req, res) => {
   const user =  new User({
@@ -21,10 +22,17 @@ exports.registerUsers = (req, res) => {
           email: req.body.email,
           password: req.body.password
         });
-        newUser
-          .save()
-          .then((user) => res.status(200).json(user))
-          .catch((err) => res.status(400).json({error: "There was an error creating this user"}));
+
+        bcrypt.genSalt(10, (err, salt) => {
+          if (err) throw err;
+          bcrypt.hash(newUser.password, salt, (err, hash) => {
+            if (err) throw err;
+            newUser.password = hash;
+            newUser.save()
+              .then(user => res.status(200).json(user))
+              .catch(err => res.status(400).json({error: "User has been taken"}))
+          });
+        });
       }
     })
 }
