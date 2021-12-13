@@ -3,7 +3,7 @@ const router = express.Router();
 const {
   getUsers,
   registerUsers,
-  loginUser
+  loginUser,
 } = require("../../controller/users");
 
 router.get("/", getUsers);
