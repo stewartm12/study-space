@@ -3,7 +3,7 @@ const app = express();
 const users = require("./routes/api/users");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const db = require("./config/keys").mongoURI
+const db = require("./config/keys").mongoURI;
 const path = require("path");
 
 if (process.env.NODE_ENV === "production") {
@@ -15,7 +15,8 @@ if (process.env.NODE_ENV === "production") {
 
 const PORT = process.env.PORT || 5000;
 
-mongoose.connect(db)
+mongoose
+  .connect(db)
   .then(() => console.log("Connected to mongoDB"))
   .catch((error) => console.log(error));
 
