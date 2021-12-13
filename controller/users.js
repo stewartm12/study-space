@@ -2,6 +2,8 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const keys = require("../config/keys");
 const jwt = require("jsonwebtoken");
+const validateRegisterInput = require("../validation/register");
+const validateLoginInput = require("../validation/login");
 
 exports.getUsers = (req, res) => {
   const user = new User({
@@ -14,6 +16,10 @@ exports.getUsers = (req, res) => {
 };
 
 exports.registerUsers = (req, res) => {
+  const { errors, isValid } = validateRegisterInput(req.body);
+
+  if (!isValid) return res.status(400).json(errors);
+
   User.findOne({ email: req.body.email }).then((user) => {
     if (user) {
       return res.status(400).json({ email: "User is already registered" });
@@ -31,10 +37,22 @@ exports.registerUsers = (req, res) => {
           newUser.password = hash;
           newUser
             .save()
-            .then((user) => res.status(200).json(user))
-            .catch((err) =>
-              res.status(400).json({ error: "User has been taken" })
-            );
+            .then((user) => {
+              const payload = { id: user.id, handle: user.handle };
+
+              jwt.sign(
+                payload,
+                keys.secretOrKey,
+                { expiresIn: 3600 },
+                (err, token) => {
+                  return res.status(200).json({
+                    success: true,
+                    token: "Bearer " + token,
+                  });
+                }
+              );
+            })
+            .catch((err) => console.log(err));
         });
       });
     }
@@ -42,14 +60,20 @@ exports.registerUsers = (req, res) => {
 };
 
 exports.loginUser = (req, res) => {
+  const { errors, isValid } = validateLoginInput(req.body);
+
+  if (!isValid) return res.status(400).json(errors);
+
   const email = req.body.email;
   const password = req.body.password;
 
   User.findOne({ email }).then((user) => {
+    console.log(user)
     if (!user)
       return res.status(400).json({ error: "This user does not exist" });
 
     bcrypt.compare(password, user.password).then((matched) => {
+      console.log(matched)
       if (matched) {
         const payload = {
           id: user.id,
@@ -68,7 +92,8 @@ exports.loginUser = (req, res) => {
           }
         );
       } else {
-        return res.status(400).json({ error: "Wrong password" });
+        errors.password = "Incorrect password";
+        return res.status(400).json(errors);
       }
     });
   });
