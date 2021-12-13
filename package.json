@@ -1,5 +1,5 @@
 {
-  "name": "space-on",
+  "name": "study-space",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -21,6 +21,7 @@
     "concurrently": "^6.4.0",
     "express": "^4.17.1",
     "mongoose": "^6.1.1",
+    "multer": "^1.4.4",
     "nodemon": "^2.0.15",
     "passport": "^0.5.0",
     "passport-jwt": "^4.0.0",
