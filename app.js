@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const passport = require("passport");
 const users = require("./routes/api/users");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -26,6 +27,9 @@ app.use(
   })
 );
 app.use(bodyParser.json());
+
+app.use(passport.initialize());
+require("./config/passport")(passport);
 
 app.use("/api/users", users);
 
