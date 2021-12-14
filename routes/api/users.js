@@ -1,11 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
-const {
-  getUsers,
-  registerUsers,
-  loginUser,
-} = require("../../controller/users");
+const { registerUsers, loginUser } = require("../../controller/users");
 
 router.get(
   "/current",
@@ -15,12 +11,13 @@ router.get(
       id: req.user.id,
       username: req.user.username,
       email: req.user.email,
+      institution: req.user.institution,
+      institutionName: req.user.institutionName,
+      subjects: req.user.subjects,
       date: req.user.date,
     });
   }
 );
-
-router.get("/", getUsers);
 
 router.post("/register", registerUsers);
 
@@ -34,6 +31,10 @@ router.get(
       id: req.user.id,
       username: req.user.username,
       email: req.user.email,
+      description: req.user.description,
+      institution: req.user.institution,
+      institutionName: req.user.institutionName,
+      subjects: req.user.subjects,
     });
   }
 );
