@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const passport = require("passport");
 const users = require("./routes/api/users");
+const cramSession = require("./routes/api/cramSession");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const db = require("./config/keys").mongoURI;
@@ -32,6 +33,7 @@ app.use(passport.initialize());
 require("./config/passport")(passport);
 
 app.use("/api/users", users);
+app.use("/api/cramSession", cramSession);
 
 app.listen(PORT, () => {
   console.log(`Example app listening at port ${PORT}`);
