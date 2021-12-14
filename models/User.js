@@ -21,7 +21,7 @@ const UserSchema = new Schema({
   subjects: {
     type: Array,
     items: {
-      type: String
+      type: String,
     },
   },
   password: {

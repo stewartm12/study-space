@@ -73,7 +73,7 @@ exports.loginUser = (req, res) => {
     if (!user)
       return res.status(400).json({ error: "This user does not exist" });
 
-      bcrypt.compare(password, user.password).then((matched) => {
+    bcrypt.compare(password, user.password).then((matched) => {
       if (matched) {
         const payload = {
           id: user.id,
