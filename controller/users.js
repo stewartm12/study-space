@@ -5,16 +5,6 @@ const jwt = require("jsonwebtoken");
 const validateRegisterInput = require("../validation/register");
 const validateLoginInput = require("../validation/login");
 
-exports.getUsers = (req, res) => {
-  const user = new User({
-    username: "testname",
-    email: "test@test.com",
-    password: "password",
-  });
-  user.save();
-  return res.status(200).json(user);
-};
-
 exports.registerUsers = (req, res) => {
   const { errors, isValid } = validateRegisterInput(req.body);
 
@@ -27,6 +17,10 @@ exports.registerUsers = (req, res) => {
       const newUser = new User({
         username: req.body.username,
         email: req.body.email,
+        description: req.body.description,
+        institution: req.body.institution,
+        institutionName: req.body.institutionName,
+        subjects: req.body.subjects,
         password: req.body.password,
       });
 
@@ -38,7 +32,15 @@ exports.registerUsers = (req, res) => {
           newUser
             .save()
             .then((user) => {
-              const payload = { id: user.id, handle: user.handle };
+              const payload = {
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                description: user.description,
+                institution: user.institution,
+                institutionName: user.institutionName,
+                subjects: user.subjects,
+              };
 
               jwt.sign(
                 payload,
@@ -68,17 +70,19 @@ exports.loginUser = (req, res) => {
   const password = req.body.password;
 
   User.findOne({ email }).then((user) => {
-    console.log(user)
     if (!user)
       return res.status(400).json({ error: "This user does not exist" });
 
-    bcrypt.compare(password, user.password).then((matched) => {
-      console.log(matched)
+      bcrypt.compare(password, user.password).then((matched) => {
       if (matched) {
         const payload = {
           id: user.id,
           username: user.username,
           email: user.email,
+          description: user.description,
+          institution: user.institution,
+          institutionName: user.institutionName,
+          subjects: user.subjects,
         };
         jwt.sign(
           payload,
