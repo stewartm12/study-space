@@ -1,5 +1,5 @@
 const Validator = require("validator");
-const validText = require("./valid-text");
+const { validText } = require("./valid-text");
 
 module.exports = (data) => {
   let errors = {};

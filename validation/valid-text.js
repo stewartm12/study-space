@@ -1,5 +1,10 @@
-const validText = str => {
-  return typeof str === 'string' && str.trim().length > 0;
-}
+exports.validSubjects = (arr) => {
+  for (let subject of arr) {
+  }
+  return true;
+};
 
-module.exports = validText;
+exports.validText = (str) => {
+  return typeof str === "string" && str.trim().length > 0;
+};
+

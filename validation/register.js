@@ -1,11 +1,16 @@
 const Validator = require("validator");
-const validText = require("./valid-text");
+const { validText, validSubjects } = require("./valid-text");
 
 module.exports = (data) => {
   let errors = {};
 
   data.username = validText(data.username) ? data.username : "";
   data.email = validText(data.email) ? data.email : "";
+  data.institution = validText(data.institution) ? data.institution : "";
+  data.institutionName = validText(data.institutionName)
+    ? data.institutionName
+    : "";
+  data.subjects = validSubjects(data.subjects) ? data.subjects : [];
   data.password = validText(data.password) ? data.password : "";
   data.passwordConfirmation = validText(data.passwordConfirmation)
     ? data.passwordConfirmation
@@ -25,6 +30,14 @@ module.exports = (data) => {
 
   if (Validator.isEmpty(data.email)) {
     errors.email = "Email field is required";
+  }
+
+  if (Validator.isEmpty(data.institution)) {
+    errors.institution = "Institution field is required";
+  }
+
+  if (Validator.isEmpty(data.institutionName)) {
+    errors.institutionName = "Insitution name field is required";
   }
 
   if (Validator.isEmpty(data.password)) {
