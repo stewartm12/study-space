@@ -10,6 +10,20 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
+  institution: {
+    type: String,
+    required: true,
+  },
+  institutionName: {
+    type: String,
+    required: true,
+  },
+  subjects: {
+    type: Array,
+    items: {
+      type: String
+    },
+  },
   password: {
     type: String,
     required: true,
